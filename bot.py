@@ -4,6 +4,7 @@ from twilio.rest import Client
 import smtplib
 import time
 import random
+import logging
 
 
 class Bot:
@@ -69,3 +70,25 @@ class Bot:
 
         client.calls.create(to=number, from_=twilioNumber,
                             url=TWIML_INSTRUCTIONS_URL, method="GET")
+
+    def check_price(self, max_price):
+        """Check if ticket price is within budget"""
+        try:
+            price_element = self.webdriver.find_element_by_x_path('//strong[@class="css-14yessp ebnsudl0"]')
+            if price_element:
+                price_text = price_element.text
+                # Extract numeric value from "€296.79" format
+                price_value = float(price_text.replace('€', '').replace(',', '.'))
+                logging.info(f"Found ticket price: €{price_value}")
+                
+                if price_value <= max_price:
+                    logging.info(f"Price €{price_value} is within budget (max: €{max_price})")
+                    return True
+                else:
+                    logging.warning(f"Price €{price_value} exceeds budget (max: €{max_price})")
+                    return False
+        except:
+            logging.warning("Could not find or parse ticket price")
+            return True  # If can't find price, proceed anyway
+        
+        return False

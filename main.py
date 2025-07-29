@@ -36,6 +36,13 @@ def main():
         bot.refresher()
 
     logging.info("Ticket(s) found!")
+    
+    # Check price if max_price is set
+    max_price = ticket.get("maxPrice")
+    if max_price and not bot.check_price(max_price):
+        logging.warning("Ticket price exceeds budget, continuing to search...")
+        bot.refresher()
+        return main()  # Restart the search
 
     logging.info("Reserving ticket")
     bot.reserve_ticket()

@@ -3,7 +3,8 @@
         "magicLink": "",
         "festivalName": "",
         "otherCategory": "",
-        "ticketName": ""
+        "ticketName": "",
+        "maxPrice": ""
     },
     "notification": {
         "sid": "",
